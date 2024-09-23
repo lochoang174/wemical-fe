@@ -111,21 +111,21 @@ const InputValue = ({ index, input }: InputValueProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col justify-center gap-1 items-start">
+          <div className="flex flex-col justify-center gap-1 items-start text-white">
             <div
-              className="rounded-xl p-2 bg-[#e0e0e2] flex border-2 border-gray-200 cursor-pointer w-[70px]"
+              className="rounded-xl p-2 bg-[#6977e4] flex border-2  cursor-pointer w-[80px] justify-center gap-1 "
               onClick={handleOpenModal}
             >
               <img src={input.token!.icon} alt="" className="w-5 h-5" />
-              <span className="text-[#29292a] text-[12px] self-center">
+              <span className=" text-[12px] self-center">
                 {input.token!.name}
               </span>
             </div>
-            <div className="text-[12px]">
+            {/* <div className="text-[12px]">
               <span className="text-[#CDCDD0]">
                 Balance: <span className="text-[#5BA4FF]">{0}</span>
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

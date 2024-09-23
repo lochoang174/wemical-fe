@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   addInputItem,
   handleCloseSelectToken,
+  setAmountInput,
   setInputList,
 } from "../redux/slices/SwapSlice";
 import SelectToken from "./Input/SelectToken";
@@ -17,11 +18,13 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import InputList from "./Input/InputList";
 import ActionList from "./Action/ActionList";
 import { ActionType } from "../types";
+import { useAlert } from "../contexts/AlerProvider";
 
 const SwapToken = () => {
   const { inputList } = useAppSelector((state) => state.swap);
   const { openSelectToken } = useAppSelector((state) => state.swap);
   const { signAndSubmitTransaction } = useWallet();
+  const {setAlert}=useAlert()
   const dispatch = useAppDispatch();
   const aptosConfig = new AptosConfig({ network: Network.TESTNET });
   const aptos = new Aptos(aptosConfig);
@@ -30,34 +33,7 @@ const SwapToken = () => {
     dispatch(handleCloseSelectToken());
   }, []);
 
-  const transactions = [
-    {
-      function: `${MODULE_ADDRESS}::scripts_v3::swap`,
-      typeArguments: [
-        "0x1::aptos_coin::AptosCoin", // coin to swap
-        "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::USDC", // coin to swap to
-        "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curves (static)
-      ],
-      functionArguments: [
-        100000, // amount of coin to swap
-        10000, // minimum amount of coin to swap to
-      ],
-    },
-    {
-      function: `${MODULE_ADDRESS}::scripts_v3::swap`,
-      typeArguments: [
-        "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::USDC", // coin to swap
-        "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::BTC", // coin to swap to
-        "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curves (static)
-      ],
-      functionArguments: [
-        100000, // amount of coin to swap
-        1, // minimum amount of coin to swap to
-      ],
-    },
-  ];
-
-
+  
   const handleDrop = (item: ActionType) => {
     const id = uuidv4();
     dispatch(
@@ -98,7 +74,13 @@ const SwapToken = () => {
       for (let i = 0; i < inputList.length-1; i++) {
         try {
           if(i===0){
-            prevResult=inputList[i].amount
+            if(inputList[i].token.name==="USDC"){
+              prevResult=inputList[i].amount*1000000
+
+            }else{
+              prevResult=inputList[i].amount*100000000
+
+            }
           }
           // Thực hiện từng transaction
           const response = await signAndSubmitTransaction({
@@ -122,9 +104,27 @@ const SwapToken = () => {
           });
           console.log(`Transaction completed:`, committedTransaction.events[3].data.x_out);
           prevResult=committedTransaction.events[3].data.x_out
-      
-          // Thêm thời gian chờ giữa các giao dịch (nếu cần)
-          // await new Promise((resolve) => setTimeout(resolve, 2000)); // Chờ 2 giây giữa các giao dịch
+          let show=prevResult
+          if(inputList[i+1].token.name==="USDC"){
+            show=show/1000000
+          }else{
+            show=show/100000000
+
+          }
+          dispatch(setAmountInput({id:inputList[i+1].id,newAmount:show}))
+          const alertContent = 
+        <>
+          Transaction:{" "}
+          <a
+            href={`https://explorer.aptoslabs.com/txn/${committedTransaction.hash}?network=testnet`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {committedTransaction.hash}
+          </a>
+        </>
+
+      setAlert(alertContent, "success"); 
         } catch (error) {
           console.error(`Transaction ${i + 1} failed:`, error);
         }

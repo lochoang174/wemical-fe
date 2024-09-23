@@ -7,13 +7,16 @@ import { store } from "./redux/store.tsx";
 import { Provider } from "react-redux";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
+import { AlertProvider } from "./contexts/AlerProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <WalletProvider>
-    <DndProvider backend={HTML5Backend}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </DndProvider>
+    <AlertProvider>
+      <DndProvider backend={HTML5Backend}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </DndProvider>
+    </AlertProvider>
   </WalletProvider>
 );
