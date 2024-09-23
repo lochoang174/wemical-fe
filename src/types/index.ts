@@ -1,6 +1,7 @@
 export interface IToken {
   name: string;
   icon: string;
+  type:string
  
 }
 export interface InputType{

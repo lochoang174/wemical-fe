@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { MdOutlineSwapVert } from "react-icons/md";
-import InputValue from "./Input/InputValue";
-import { InputType, IToken } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
 import { CryptoList } from "../utils/CryptoList";
@@ -25,12 +22,9 @@ const SwapToken = () => {
   const { openSelectToken } = useAppSelector((state) => state.swap);
   const { signAndSubmitTransaction } = useWallet();
   const dispatch = useAppDispatch();
-  // const [inputList, setInputList] = useState<InputType[]>([]);
   const aptosConfig = new AptosConfig({ network: Network.TESTNET });
   const aptos = new Aptos(aptosConfig);
-  // const handleSwap=()=>{
-  //   dispatch(swapTokens())
-  // }
+
   const handleClose = useCallback(() => {
     dispatch(handleCloseSelectToken());
   }, []);
@@ -62,61 +56,7 @@ const SwapToken = () => {
     },
   ];
 
-  const transaction1 = async (onSuccess: () => Promise<void>) => {
-    console.log("tran1");
-    try {
-      const response = await signAndSubmitTransaction({
-        data: {
-          function: `${MODULE_ADDRESS}::scripts_v3::swap`,
-          typeArguments: [
-            "0x1::aptos_coin::AptosCoin", //coin to swap
-            "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::USDC", //coin to swap to
-            "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", //curves (static)
-          ],
-          functionArguments: [
-            100000, // amount of coin to swap
-            10000, // minimum amount of coin to swap to
-          ],
-        },
-      });
-      const committedTransaction = await aptos.waitForTransaction({
-        transactionHash: response.hash,
-      });
-      // console.log(committedTransaction)
 
-      onSuccess();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const transaction2 = async () => {
-    console.log("tran2");
-
-    try {
-      const response = await signAndSubmitTransaction({
-        data: {
-          function: `${MODULE_ADDRESS}::scripts_v3::swap`,
-          typeArguments: [
-            "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::USDC", //coin to swap
-            "0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::BTC", //coin to swap to
-            "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", //curves (static)
-          ],
-          functionArguments: [
-            100000, // amount of coin to swap
-            1, // minimum amount of coin to swap to
-          ],
-        },
-      });
-      const committedTransaction = await aptos.waitForTransaction({
-        transactionHash: response.hash,
-      });
-
-      console.log(committedTransaction);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleDrop = (item: any) => {
     const id = uuidv4();
     dispatch(
@@ -127,21 +67,10 @@ const SwapToken = () => {
         token: CryptoList[0],
       })
     );
-    // setInputList((prev: InputType[]) => {
-    //   return [
-    //     ...prev,
-    //     {
-    //       id,
-    //       title: item.title,
-    //       amount:0,
-
-    //     },
-    //   ];
-    // });
   };
 
   const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
 
     if (!destination) {
       return;
@@ -161,29 +90,45 @@ const SwapToken = () => {
     updatedItems.splice(destinationIndex, 0, removed);
     dispatch(setInputList(updatedItems)); // Dispatch the updated list to Redux store
   };
+  let prevResult=0;
   const handleTransactionSwap = async () => {
     try {
       // Duyệt qua từng transaction trong mảng với for await
-      for await (const transaction of transactions) {
-        // Thực hiện từng transaction
-        const response = await signAndSubmitTransaction({
-          data: {
-            function: transaction.function,
-            typeArguments: transaction.typeArguments,
-            functionArguments: transaction.functionArguments,
-          },
-        });
-
-        // Chờ giao dịch hoàn tất
-        const committedTransaction = await aptos.waitForTransaction({
-          transactionHash: response.hash,
-        });
-        console.log(`Transaction completed:`, committedTransaction);
-
-        // Thêm thời gian chờ giữa các giao dịch (nếu cần)
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Chờ 2 giây giữa các giao dịch
+      for (let i = 0; i < inputList.length-1; i++) {
+        try {
+          if(i===0){
+            prevResult=inputList[i].amount
+          }
+          // Thực hiện từng transaction
+          const response = await signAndSubmitTransaction({
+            data: {
+              function: `${MODULE_ADDRESS}::scripts_v3::swap`,
+              typeArguments: [
+                inputList[i].token.type, // coin to swap
+                inputList[i+1].token.type, // coin to swap to
+                "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curves (static)
+              ],
+              functionArguments: [
+                prevResult, // amount of coin to swap
+                1, // minimum amount of coin to swap to
+              ],
+            },
+          });
+      
+          // Chờ giao dịch hoàn tất
+          const committedTransaction = await aptos.waitForTransaction({
+            transactionHash: response.hash,
+          });
+          console.log(`Transaction completed:`, committedTransaction.events[3].data.x_out);
+          prevResult=committedTransaction.events[3].data.x_out
+      
+          // Thêm thời gian chờ giữa các giao dịch (nếu cần)
+          // await new Promise((resolve) => setTimeout(resolve, 2000)); // Chờ 2 giây giữa các giao dịch
+        } catch (error) {
+          console.error(`Transaction ${i + 1} failed:`, error);
+        }
       }
-
+      
       console.log("All transactions completed");
     } catch (error) {
       console.error("Error during transactions:", error);

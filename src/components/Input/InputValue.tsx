@@ -40,7 +40,6 @@ const InputValue = ({ index, input }: InputValueProps) => {
         pool2.tokens.includes(input.token.name) &&
         pool2.tokens.includes(inputList[index + 1].token.name ?? "")
     );
-    console.log(pool);
 
     return pool ? pool.image : ""; // Return empty string if no image is found
   };
