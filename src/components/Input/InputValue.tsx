@@ -6,6 +6,7 @@ import {
   setAmountInput,
 } from "../../redux/slices/SwapSlice";
 import { poolList } from "../../utils/PoolList";
+import { VscArrowSwap } from "react-icons/vsc";
 
 interface InputValueProps {
   index: number;
@@ -63,8 +64,10 @@ const InputValue = ({ index, input }: InputValueProps) => {
       >
         <div className="p-2 flex justify-between w-full">
           <div className="flex gap-2">
-            <span className=" bg-gradient-to-br from-[#7872b7] to-[#6aa1ed] text-white rounded-3xl flex justify-center items-center w-[80px] text-xs">
-              {input.title}
+            <span className=" bg-gradient-to-br from-[#7872b7] to-[#6aa1ed] text-white rounded-3xl flex justify-center items-center w-[80px] text-xs flex-col">
+              
+              <span className="text-3xl">{input.action.icon}</span>
+              {input.action.title}
             </span>
             <div className="flex flex-col justify-center gap-2 items-start">
               <div className=" text-xl whitespace-nowrap tracking-[0] leading-[normal]">

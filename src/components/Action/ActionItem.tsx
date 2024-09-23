@@ -8,7 +8,7 @@ interface ActionItemProps {
 const ActionItem = ({ title, icon }: ActionItemProps) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: ItemTypes.COMPONENT,
-    item: { title },
+    item: { title,icon },
     collect: (monitor: any) => ({
       isDragging: !!monitor.isDragging(),
     }),

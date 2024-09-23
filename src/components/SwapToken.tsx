@@ -16,6 +16,7 @@ import DropContainer from "./Action/DropContainer";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import InputList from "./Input/InputList";
 import ActionList from "./Action/ActionList";
+import { ActionType } from "../types";
 
 const SwapToken = () => {
   const { inputList } = useAppSelector((state) => state.swap);
@@ -57,12 +58,12 @@ const SwapToken = () => {
   ];
 
 
-  const handleDrop = (item: any) => {
+  const handleDrop = (item: ActionType) => {
     const id = uuidv4();
     dispatch(
       addInputItem({
         amount: 0,
-        title: item.title,
+        action:item,
         id,
         token: CryptoList[0],
       })

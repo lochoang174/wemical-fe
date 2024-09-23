@@ -6,7 +6,11 @@ export interface IToken {
 }
 export interface InputType{
   id:string,
-  title:string,
+  action:ActionType,
   token: IToken,
   amount:number
+}
+export interface ActionType{
+  title:string,
+  icon: JSX.Element
 }
