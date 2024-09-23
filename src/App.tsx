@@ -1,15 +1,25 @@
+import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import './App.css'
-import Home from './pages/Home'
+import "./App.css";
+import Layout from "./pages/layouyt/Layout";
+import Home from "./pages/Home";
+
 
 function App() {
-
   return (
-    // <div className='bg-red-500'>
-    //   <SwapToken></SwapToken>
-    // </div>
-    <Home></Home>
-  )
+    <Router>
+      <Routes>
+
+        <Route path="/" element={<Layout />} >
+          <Route path="/" element={<Home />} />
+
+         
+        </Route>
+        
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

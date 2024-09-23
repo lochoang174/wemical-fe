@@ -1,60 +1,60 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IToken } from '../../types';
-import { CryptoList } from '../../utils/CryptoList';
+import { InputType, IToken } from '../../types';
 
 interface SwapState {
-  tokenFrom: IToken | null;
-  tokenTo: IToken | null;
-  amountFrom: number;
-  amountTo: number;
   openSelectToken: boolean;
-  isSelectingFromToken: boolean;
+  inputList: InputType[];
+  idInputSelected: string
 }
 
+interface ISetAmount {
+  id: string;
+  newAmount: number;
+}
+
+
 const initialState: SwapState = {
-  tokenFrom: CryptoList[0],
-  tokenTo: CryptoList[1],
-  amountFrom: 0,
-  amountTo: 0,
   openSelectToken: false,
-  isSelectingFromToken: false,
+  inputList: [],
+  idInputSelected:""
 };
 
 const swapSlice = createSlice({
   name: 'swap',
   initialState,
   reducers: {
-    setTokenFrom: (state, action: PayloadAction<IToken>) => {
-      state.tokenFrom = action.payload;
+    setInputList: (state, action: PayloadAction<InputType[]>) => {
+      state.inputList = action.payload;
     },
-    setTokenTo: (state, action: PayloadAction<IToken>) => {
-      state.tokenTo = action.payload;
+    addInputItem: (state, action: PayloadAction<InputType>) => {
+      state.inputList = [...state.inputList, action.payload];
     },
-    setAmountFrom: (state, action: PayloadAction<number>) => {
-      state.amountFrom = action.payload;
+    setAmountInput: (state, action: PayloadAction<ISetAmount>) => {
+      const { id, newAmount } = action.payload;
+      const input = state.inputList.find((item) => item.id === id); // Search by id
+      if (input) {
+        input.amount = newAmount; // Assuming 'amount' exists in InputType
+      }
     },
-    setAmountTo: (state, action: PayloadAction<number>) => {
-      state.amountTo = action.payload;
-    },
-    swapTokens: (state) => {
-      const tempToken = state.tokenFrom;
-      state.tokenFrom = state.tokenTo;
-      state.tokenTo = tempToken;
-      const tempAmount = state.amountFrom;
-      state.amountFrom = state.amountTo;
-      state.amountTo = tempAmount;
+    setTokenInput: (state, action: PayloadAction<IToken>) => {
+      const newToken = action.payload;
+      const input = state.inputList.find((item) => item.id === state.idInputSelected); // Search by id
+      if (input) {
+        input.token = newToken; // Assuming 'token' exists in InputType
+      }
+      state.openSelectToken = false;
+
     },
     handleCloseSelectToken: (state) => {
       state.openSelectToken = false;
     },
-    handlOpenSelectToken: (state, action: PayloadAction<boolean>) => {
+    handlOpenSelectToken: (state,action: PayloadAction<string>) => {
+      state.idInputSelected=action.payload
       state.openSelectToken = true;
-      state.isSelectingFromToken = action.payload;
     },
   },
 });
 
-export const { setTokenFrom, setTokenTo, setAmountFrom, setAmountTo, swapTokens, handleCloseSelectToken, handlOpenSelectToken } = swapSlice.actions;
+export const { setInputList, handleCloseSelectToken, handlOpenSelectToken, addInputItem, setAmountInput, setTokenInput } = swapSlice.actions;
 
 export default swapSlice.reducer;
-

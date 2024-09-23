@@ -1,15 +1,15 @@
 #root {
   box-sizing: border-box;
-  background-color: #F5F5F5;
+  background-color: #FAFAFA;
   font-family: 'Roboto', sans-serif;
 }
 
 .wallet-button {
-  padding: 10px 20px;
+  padding: 8px 12px;
   height: auto;
-  border-radius: 6px;
-  font-size: 16px;
-  background-color: #000000;
+  border-radius: 24px;
+  font-size: 14px;
+  background-color: #617AFA;
   color: white;
 }
 

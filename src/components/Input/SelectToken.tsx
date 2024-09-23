@@ -8,31 +8,32 @@ import {
 } from "@mui/material";
 import React from "react";
 import { CiSearch } from "react-icons/ci";
-import { CryptoList } from "../utils/CryptoList";
-import { IToken } from "../types";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setTokenFrom, setTokenTo } from "../redux/slices/SwapSlice";
+import { CryptoList } from "../../utils/CryptoList";
+import { IToken } from "../../types";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setTokenInput } from "../../redux/slices/SwapSlice";
+// import { setTokenFrom, setTokenTo } from "../redux/slices/SwapSlice";
 interface SelectTokenProps {
   open: boolean;
   handleClose: () => void;
-  
 }
 const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
   const [searchTerm, setSearchTerm] = React.useState("");
-  const isFrom = useAppSelector((state) => state.swap.isSelectingFromToken);
+  // const isFrom = useAppSelector((state) => state.swap.isSelectingFromToken);
   const dispatch = useAppDispatch();
   const filteredTokens = CryptoList.filter((token) =>
     token.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const hanldeSelectToken =(token: IToken) => {
-      if (isFrom) {
-        dispatch(setTokenFrom(token));
-      } else {
-        dispatch(setTokenTo(token));
-      }
-      handleClose();
-    }
+  const hanldeSelectToken = (token: IToken) => {
+    // if (isFrom) {
+    //   dispatch(setTokenFrom(token));
+    // } else {
+    //   dispatch(setTokenTo(token));
+    // }
+    // handleClose();
+    dispatch(setTokenInput(token));
+  };
 
   return (
     <Modal
@@ -94,5 +95,8 @@ const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
 };
 
 export default React.memo(SelectToken, (prevProps, nextProps) => {
-  return prevProps.open === nextProps.open && prevProps.handleClose === nextProps.handleClose;
+  return (
+    prevProps.open === nextProps.open &&
+    prevProps.handleClose === nextProps.handleClose
+  );
 });
