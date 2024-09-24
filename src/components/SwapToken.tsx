@@ -106,7 +106,7 @@ const SwapToken = () => {
                     console.log(committedTransaction.events[3].data)
                     // @ts-ignore
 
-          prevResult = committedTransaction.events[3].data.x_in!==0? committedTransaction.events[3].data.x_out:committedTransaction.events[3].data.y_out;
+          prevResult = Number(committedTransaction.events[3].data.x_in)!==0? committedTransaction.events[3].data.y_out:committedTransaction.events[3].data.x_out;
           // @ts-ignore
           let show = prevResult;
           // console.log(committedTransaction.events[3].data)
