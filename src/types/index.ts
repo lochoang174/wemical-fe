@@ -1,5 +1,6 @@
 export interface IToken {
   name: string;
+  subname:string;
   icon: string;
   type:string
  

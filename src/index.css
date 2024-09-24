@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: 'BeauSans';
+    src: url('/fonts/BT-BeauSans-Regular-BF64d45952e54c1.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  
+    overflow: hidden;
+      /* cursor: url('cursor2.png'), auto; */
+      font-family: 'BeauSans', sans-serif;
+  
+  }

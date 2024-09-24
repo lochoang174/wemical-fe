@@ -8,16 +8,25 @@ import Footer from "./Footer";
 const Layout = () => {
   return (
     <div>
-      <div className="flex flex-col h-screen w-[100%]">
-        <Header></Header>
+      {/* <div className="flex flex-col h-screen w-[100%]">
         <div className="flex-grow flex">
           <div className="h-[100%]">
-          <Sidebar></Sidebar>
+          
 
+          </div>
+        </div>
+        {/* <Footer></Footer> 
+      </div> */}
+      <div className="flex h-screen w-[100%]">
+        <div className="w-[300px] h-[100%]">
+          <Sidebar></Sidebar>
+        </div>
+        <div className="flex-grow flex flex-col">
+          <div className="mt-2">
+          <Header></Header>
           </div>
           <Outlet></Outlet>
         </div>
-        <Footer></Footer>
       </div>
     </div>
   );

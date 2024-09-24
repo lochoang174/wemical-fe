@@ -54,7 +54,7 @@ const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
         <div className="text-[#29292a] text-lg whitespace-nowrap border-2 border-gray-200 rounded-lg p-2 tracking-[0] leading-[normal] flex items-center gap-2 mb-4">
           <CiSearch className="w-5 h-5" />
           <input
-            placeholder="Tìm kiếm theo tên token"
+            placeholder="Searching token by name"
             type="text"
             className="w-full bg-transparent outline-none  [&::-webkit-inner-spin-button]:appearance-none"
             value={searchTerm}
@@ -74,7 +74,7 @@ const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
               </div>
               <ListItemText
                 primary={token.name}
-                secondary={token.name === "USDC" ? "USD Coin" : token.name}
+                secondary={token.subname}
               />
               <Typography variant="body2" color="text.secondary">
                 --

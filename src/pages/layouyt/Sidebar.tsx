@@ -3,6 +3,7 @@ import { IoMdSettings } from "react-icons/io";
 import { AiOutlineTransaction } from "react-icons/ai";
 import { SiHomeassistant } from "react-icons/si";
 import { NavLink, Outlet } from "react-router-dom";
+import Search from "./Search";
 
 const items = [
   {
@@ -24,7 +25,8 @@ const items = [
 const Sidebar = () => {
   return (
     <div className="h-full  flex flex-col w-[280px] gap-5 items-center justify-between">
-      <div className="mt-[40px] px-4 w-full text-sm flex flex-col gap-3">
+      <div className="mt-[140px] px-4 w-full text-sm flex flex-col gap-3">
+        {/* <Search></Search> */}
         {items.map((item, index) => (
           <NavLink
             to={item.to}
@@ -35,11 +37,12 @@ const Sidebar = () => {
               alignItems: "center",
               justifyContent: "flex-start",
               textDecoration: "none",
-              color: isActive ? "blue" : "black",
-              background: isActive ? "#D8E3EF" : "transparent",
+              color: isActive ? "black" : "#CCCCCC",
+              background: isActive ? "white" : "transparent",
               padding: "10px",
               width: "100%",
               letterSpacing: "2px",
+              height:"48px"
             })}
             aria-hidden="false"
           >

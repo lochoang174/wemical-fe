@@ -11,7 +11,7 @@ interface Props {
 const InputList = React.memo(
   ({ inputList }: Props) => {
     if (inputList.length === 0) {
-      return <span className="text-gray-300 text-xl m-auto">No items</span>;
+      return <span className="text-gray-300 text-xl mx-auto mt-10">No items</span>;
     }
     return (
       <div className=" flex flex-col gap-1 w-[100%]">

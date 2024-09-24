@@ -4,8 +4,8 @@ import { WalletSelector as AntdWalletSelector } from "@aptos-labs/wallet-adapter
 const Header = () => {
   return (
     <header className=" text-black p-3 px-5 flex justify-between">
-          <div className="w-[100px]">
-            <img src="/logo.png" alt="" />
+          <div className="">
+            <img src="/logo.png" className='w-[124px] ' alt="" />
           </div>
 
           <AntdWalletSelector />

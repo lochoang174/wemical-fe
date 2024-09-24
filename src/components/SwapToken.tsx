@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { CryptoList } from "../utils/CryptoList";
@@ -24,7 +24,7 @@ const SwapToken = () => {
   const { inputList } = useAppSelector((state) => state.swap);
   const { openSelectToken } = useAppSelector((state) => state.swap);
   const { signAndSubmitTransaction } = useWallet();
-  const {setAlert}=useAlert()
+  const { setAlert } = useAlert();
   const dispatch = useAppDispatch();
   const aptosConfig = new AptosConfig({ network: Network.TESTNET });
   const aptos = new Aptos(aptosConfig);
@@ -33,13 +33,12 @@ const SwapToken = () => {
     dispatch(handleCloseSelectToken());
   }, []);
 
-  
   const handleDrop = (item: ActionType) => {
     const id = uuidv4();
     dispatch(
       addInputItem({
         amount: 0,
-        action:item,
+        action: item,
         id,
         token: CryptoList[0],
       })
@@ -67,19 +66,18 @@ const SwapToken = () => {
     updatedItems.splice(destinationIndex, 0, removed);
     dispatch(setInputList(updatedItems)); // Dispatch the updated list to Redux store
   };
-  let prevResult=0;
+  let prevResult = 0;
   const handleTransactionSwap = async () => {
     try {
       // Duyệt qua từng transaction trong mảng với for await
-      for (let i = 0; i < inputList.length-1; i++) {
+      for (let i = 0; i < inputList.length - 1; i++) {
         try {
-          if(i===0){
-            if(inputList[i].token.name==="USDC"){
-              prevResult=inputList[i].amount*1000000
-
-            }else{
-              prevResult=inputList[i].amount*100000000
-
+          if (i === 0) {
+            if (inputList[i].token.name === "USDC") {
+              prevResult = inputList[i].amount * 1000000;
+            } else {
+              prevResult = inputList[i].amount * 100000000;
+              console.log(prevResult)
             }
           }
           // Thực hiện từng transaction
@@ -88,48 +86,65 @@ const SwapToken = () => {
               function: `${MODULE_ADDRESS}::scripts_v3::swap`,
               typeArguments: [
                 inputList[i].token.type, // coin to swap
-                inputList[i+1].token.type, // coin to swap to
+                inputList[i + 1].token.type, // coin to swap to
                 "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curves (static)
               ],
               functionArguments: [
                 prevResult, // amount of coin to swap
-                1, // minimum amount of coin to swap to
+                10000, // minimum amount of coin to swap to
               ],
             },
           });
-      
+
           // Chờ giao dịch hoàn tất
           const committedTransaction = await aptos.waitForTransaction({
             transactionHash: response.hash,
           });
-          console.log(`Transaction completed:`, committedTransaction.events[3].data.x_out);
-          prevResult=committedTransaction.events[3].data.x_out
-          let show=prevResult
-          if(inputList[i+1].token.name==="USDC"){
-            show=show/1000000
-          }else{
-            show=show/100000000
+          // @ts-ignore
+          // receive_value = x_in!=0? y_out: x_out 
+                    // @ts-ignore
+                    console.log(committedTransaction.events[3].data)
+                    // @ts-ignore
 
+          prevResult = committedTransaction.events[3].data.x_in!==0? committedTransaction.events[3].data.x_out:committedTransaction.events[3].data.y_out;
+          // @ts-ignore
+          let show = prevResult;
+          // console.log(committedTransaction.events[3].data)
+          // if (inputList[i+1].token.name === "USDC") {
+          //   prevResult = prevResult * 1000000;
+          // } else {
+          //   prevResult = prevResult * 100000000;
+          //   console.log(prevResult)
+
+          // }
+
+          if (inputList[i + 1].token.name === "USDC") {
+            show = show / 1000000;
+          } else {
+            show = show / 100000000;
           }
-          dispatch(setAmountInput({id:inputList[i+1].id,newAmount:show}))
-          const alertContent = 
-        <>
-          Transaction:{" "}
-          <a
-            href={`https://explorer.aptoslabs.com/txn/${committedTransaction.hash}?network=testnet`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {committedTransaction.hash}
-          </a>
-        </>
+          dispatch(
+            setAmountInput({ id: inputList[i + 1].id, newAmount: show })
+          );
+          const alertContent = (
+            <>
+              Transaction:{" "}
+              <a
+                href={`https://explorer.aptoslabs.com/txn/${committedTransaction.hash}?network=testnet`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {committedTransaction.hash}
+              </a>
+            </>
+          );
 
-      setAlert(alertContent, "success"); 
+          setAlert(alertContent, "success");
         } catch (error) {
           console.error(`Transaction ${i + 1} failed:`, error);
         }
       }
-      
+
       console.log("All transactions completed");
     } catch (error) {
       console.error("Error during transactions:", error);
@@ -137,9 +152,9 @@ const SwapToken = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center flex-grow gap-2 ">
+    <div className="flex flex-col items-center justify-center flex-grow gap-5 ">
       <ActionList></ActionList>
-      <div className="rounded-3xl w-[685px] h-[540px] flex flex-col gap-4 items-center relative ">
+      <div className="rounded-3xl w-[810px] h-[540px] flex flex-col gap-4 items-center relative ">
         <DropContainer onDrop={handleDrop}></DropContainer>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="list">
@@ -156,26 +171,29 @@ const SwapToken = () => {
             )}
           </Droppable>
         </DragDropContext>
-
-        <div className="flex justify-between w-[100%]">
-          <div
-            className="p-3 bg-[#CDD3DD] text-black rounded-full w-[100px] text-center cursor-pointer self-end"
-            onClick={() => {
-              dispatch(setInputList([]));
-            }}
-          >
-            Reset
-          </div>
-          <div
-            className="p-3 bg-colorButton text-white rounded-full w-[100px] text-center cursor-pointer self-end"
-            onClick={() => {
-              // transaction1(transaction2);
-              handleTransactionSwap();
-            }}
-          >
-            Swap
-          </div>
-        </div>
+        {inputList.length !== 0 && (
+          <>
+            <div className="flex justify-between w-[100%]">
+              <div
+                className="p-3 bg-[transparent] text-white border-white border-solid border-[1px] rounded-full w-[100px] text-center cursor-pointer self-end"
+                onClick={() => {
+                  dispatch(setInputList([]));
+                }}
+              >
+                Reset
+              </div>
+              <div
+                className="p-3 bg-white text-black rounded-full w-[100px] text-center cursor-pointer self-end"
+                onClick={() => {
+                  // transaction1(transaction2);
+                  handleTransactionSwap();
+                }}
+              >
+                Swap
+              </div>
+            </div>
+          </>
+        )}
       </div>
       <SelectToken
         handleClose={handleClose}

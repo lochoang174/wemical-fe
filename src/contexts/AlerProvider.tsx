@@ -43,7 +43,7 @@ export const AlertProvider = ({ children }: AlertProviderProps) => {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClose} severity={severity} variant="filled" sx={{ width: '100%' }}>
+        <Alert onClose={handleClose} severity={severity} variant="standard" sx={{ width: '100%' }}>
           {message}
         </Alert>
       </Snackbar>

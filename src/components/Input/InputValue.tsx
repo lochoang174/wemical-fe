@@ -6,7 +6,7 @@ import {
   setAmountInput,
 } from "../../redux/slices/SwapSlice";
 import { poolList } from "../../utils/PoolList";
-import { VscArrowSwap } from "react-icons/vsc";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 interface InputValueProps {
   index: number;
@@ -60,60 +60,61 @@ const InputValue = ({ index, input }: InputValueProps) => {
   return (
     <>
       <div
-        className={`border-4 border-white bg-white w-full h-[100px] rounded-3xl flex `}
+        className={`bg-[#616161]/40 w-full h-[80px] rounded-xl flex p-4 `}
       >
-        <div className="p-2 flex justify-between w-full">
-          <div className="flex gap-2">
-            <span className=" bg-gradient-to-br from-[#7872b7] to-[#6aa1ed] text-white rounded-3xl flex justify-center items-center w-[80px] text-xs flex-col">
-              
+        <div className="flex justify-between w-full">
+          <div className="flex gap-8">
+            <span className="  text-white flex justify-center items-center w-[80px] text-[14px] gap-1">
               <span className="text-3xl">{input.action.icon}</span>
               {input.action.title}
             </span>
-            <div className="flex flex-col justify-center gap-2 items-start">
-              <div className=" text-xl whitespace-nowrap tracking-[0] leading-[normal]">
+            <div className="flex flex-col justify-center">
+              <div className=" text-2xl whitespace-nowrap tracking-[0] leading-[normal]">
                 <input
                   type="number"
-                  value={input.amount === 0 ? "" : input.amount}
+                  value={ input.amount}
                   onChange={handleInputChange}
-                  className="w-full bg-transparent outline-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-[140px] bg-transparent outline-none [&::-webkit-inner-spin-button]:appearance-none overflow-auto text-white"
                   placeholder="0.00"
                 />
               </div>
-              {nextToken && (
-                <div className="text-xs text-blue-800 rounded-md  flex gap-3 bg-blue-100 px-2.5 py-0.5">
+            </div>
+          </div>
+          {nextToken && (
+                <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[400px]">
+                  {/* <div className="text-blue-800 rounded-md ">
+                    
+                  </div> */}
                   <span className="flex relative">
                     {imagePool !== "" ? (
                       <img
-                        className="w-4 h-4 rounded-md"
+                        className="w-6 h-6 rounded-md"
                         src={imagePool ?? ""}
                         alt=""
                       />
                     ) : (
                       <>
                         <img
-                          className="w-4 h-4"
+                          className="w-6 h-6 "
                           src={input.token.icon}
                           alt=""
                         />
                         <img
-                          className="w-4 h-4 absolute left-[50%]"
+                          className="w-6 h-6  absolute left-[50%]"
                           src={nextToken.icon}
                           alt=""
                         />
                       </>
                     )}
                   </span>
-                  <span>
-                    {input.token.name}/{nextToken.name}
+                  <span className="flex gap-4 ">
+                    {input.token.name}<span className="self-center"><FaArrowRightLong /></span>{nextToken.name}
                   </span>
                 </div>
               )}
-            </div>
-          </div>
-
           <div className="flex flex-col justify-center gap-1 items-start text-white">
             <div
-              className="rounded-xl p-2 bg-[#6977e4] flex border-2  cursor-pointer w-[80px] justify-center gap-1 "
+              className="rounded-xl p-2 bg-white text-black flex border-2  cursor-pointer w-[80px] justify-center gap-1 "
               onClick={handleOpenModal}
             >
               <img src={input.token!.icon} alt="" className="w-5 h-5" />

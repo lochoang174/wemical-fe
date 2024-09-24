@@ -1,12 +1,13 @@
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../../Var";
+import { ActionType } from "../../types";
 interface Pros {
-  onDrop: (item: string) => void;
+  onDrop: (item: ActionType) => void;
 }
 const DropContainer = ({ onDrop }: Pros) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.COMPONENT,
-    drop: (item: string) => onDrop(item),
+    drop: (item: ActionType) => onDrop(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -17,18 +18,19 @@ const DropContainer = ({ onDrop }: Pros) => {
       ref={drop}
       style={{
         height: "50px",
-        width: "90%",
-        border: "2px dashed blue",
-        backgroundColor: isOver ? "lightblue" : "white",
+        width: "100%",
+        border: `2px dashed ${isOver ?"white":"#C4C4C4"}`,
+        backgroundColor:"transparent",
         padding: "10px",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        color: "blue",
+        color: isOver ?"white":"#C4C4C4",
+        borderRadius:"16px"
       }}
     >
-      Drop here
+      Drag and drop, change the actions in the box
     </div>
   );
 };
