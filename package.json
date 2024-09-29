@@ -17,7 +17,7 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@hello-pangea/dnd": "^17.0.0",
-    "@mui/material": "^6.1.1",
+    "@mui/material": "5.16.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/react-redux": "^7.1.33",
     "@types/uuid": "^10.0.0",

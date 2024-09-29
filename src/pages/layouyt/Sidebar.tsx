@@ -8,17 +8,17 @@ import Search from "./Search";
 const items = [
   {
     to: "/",
-    text: "Create Recipe",
+    text: "Recipe Template",
     icon: <SiHomeassistant />,
   },
   {
-    to: "/Trasctions",
-    text: "Trasctions",
+    to: "/Trasction",
+    text: "Transaction",
     icon: <AiOutlineTransaction />,
   },
   {
-    to: "/Settings",
-    text: "Settings",
+    to: "/SmartStaking",
+    text: "Smart Staking",
     icon: <IoMdSettings />,
   },
 ];

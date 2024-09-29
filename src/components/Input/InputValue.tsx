@@ -69,7 +69,7 @@ const InputValue = ({ index, input }: InputValueProps) => {
               {input.action.title}
             </span>
             <div className="flex flex-col justify-center">
-              <div className=" text-2xl whitespace-nowrap tracking-[0] leading-[normal]">
+              <div className=" text-xl whitespace-nowrap tracking-[0] leading-[normal]">
                 <input
                   type="number"
                   value={ input.amount}
@@ -81,7 +81,7 @@ const InputValue = ({ index, input }: InputValueProps) => {
             </div>
           </div>
           {nextToken && (
-                <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[400px]">
+                <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[350px]">
                   {/* <div className="text-blue-800 rounded-md ">
                     
                   </div> */}
@@ -122,11 +122,7 @@ const InputValue = ({ index, input }: InputValueProps) => {
                 {input.token!.name}
               </span>
             </div>
-            {/* <div className="text-[12px]">
-              <span className="text-[#CDCDD0]">
-                Balance: <span className="text-[#5BA4FF]">{0}</span>
-              </span>
-            </div> */}
+           
           </div>
         </div>
       </div>

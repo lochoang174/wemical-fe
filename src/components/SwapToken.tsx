@@ -66,91 +66,95 @@ const SwapToken = () => {
     updatedItems.splice(destinationIndex, 0, removed);
     dispatch(setInputList(updatedItems)); // Dispatch the updated list to Redux store
   };
-  let prevResult = 0;
+ 
   const handleTransactionSwap = async () => {
-    try {
-      // Duyệt qua từng transaction trong mảng với for await
+   
+      let prevResult = 0;
+  
       for (let i = 0; i < inputList.length - 1; i++) {
         try {
-          if (i === 0) {
-            if (inputList[i].token.name === "USDC") {
-              prevResult = inputList[i].amount * 1000000;
-            } else {
-              prevResult = inputList[i].amount * 100000000;
-              console.log(prevResult)
-            }
-          }
-          // Thực hiện từng transaction
-          const response = await signAndSubmitTransaction({
-            data: {
-              function: `${MODULE_ADDRESS}::scripts_v3::swap`,
-              typeArguments: [
-                inputList[i].token.type, // coin to swap
-                inputList[i + 1].token.type, // coin to swap to
-                "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curves (static)
-              ],
-              functionArguments: [
-                prevResult, // amount of coin to swap
-                10000, // minimum amount of coin to swap to
-              ],
-            },
-          });
-
-          // Chờ giao dịch hoàn tất
+          prevResult = calculateInitialAmount(i, prevResult);
+  
+          // execute transaction and wait for response
+          const response = await performSwapTransaction(i, prevResult);
           const committedTransaction = await aptos.waitForTransaction({
             transactionHash: response.hash,
           });
-          // @ts-ignore
-          // receive_value = x_in!=0? y_out: x_out 
-                    // @ts-ignore
-                    console.log(committedTransaction.events[3].data)
-                    // @ts-ignore
-
-          prevResult = Number(committedTransaction.events[3].data.x_in)!==0? committedTransaction.events[3].data.y_out:committedTransaction.events[3].data.x_out;
-          // @ts-ignore
-          let show = prevResult;
-          // console.log(committedTransaction.events[3].data)
-          // if (inputList[i+1].token.name === "USDC") {
-          //   prevResult = prevResult * 1000000;
-          // } else {
-          //   prevResult = prevResult * 100000000;
-          //   console.log(prevResult)
-
-          // }
-
-          if (inputList[i + 1].token.name === "USDC") {
-            show = show / 1000000;
-          } else {
-            show = show / 100000000;
-          }
-          dispatch(
-            setAmountInput({ id: inputList[i + 1].id, newAmount: show })
-          );
-          const alertContent = (
-            <>
-              Transaction:{" "}
-              <a
-                href={`https://explorer.aptoslabs.com/txn/${committedTransaction.hash}?network=testnet`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {committedTransaction.hash}
-              </a>
-            </>
-          );
-
-          setAlert(alertContent, "success");
+  
+          prevResult = getSwapResult(committedTransaction);
+  
+          // update amount token after transaction
+          const formattedAmount = formatSwapAmount(i + 1, prevResult);
+          dispatch(setAmountInput({ id: inputList[i + 1].id, newAmount: formattedAmount }));
+  
+          // show successful transaction
+          showTransactionAlert(committedTransaction);
+  
         } catch (error) {
           console.error(`Transaction ${i + 1} failed:`, error);
+          break;
         }
       }
-
+  
       console.log("All transactions completed");
-    } catch (error) {
-      console.error("Error during transactions:", error);
-    }
+    
   };
-
+  
+  const calculateInitialAmount = (index:number, prevResult:number) => {
+    if (index === 0) {
+      return inputList[index].token.name === "USDC" 
+        ? inputList[index].amount * 1000000 
+        : inputList[index].amount * 100000000;
+    }
+    return prevResult;
+  };
+  
+  const performSwapTransaction = async (index:number, prevResult:number) => {
+    return await signAndSubmitTransaction({
+      data: {
+        function: `${MODULE_ADDRESS}::scripts_v3::swap`,
+        typeArguments: [
+          inputList[index].token.type,      // coin to swap
+          inputList[index + 1].token.type,  // coin to swap to
+          "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", // curve (static)
+        ],
+        functionArguments: [
+          prevResult,  // amount to swap
+          10000,       // minimum amount to swap
+        ],
+      },
+    });
+  };
+  
+  const getSwapResult = (transaction:any) => {
+    const swapEvent = transaction.events[3];
+    return Number(swapEvent.data.x_in) !== 0 
+      ? swapEvent.data.y_out 
+      : swapEvent.data.x_out;
+  };
+  
+  const formatSwapAmount = (index:number, amount:number) => {
+    return inputList[index].token.name === "USDC" 
+      ? amount / 1000000 
+      : amount / 100000000;
+  };
+  
+  const showTransactionAlert = (transaction:any) => {
+    const alertContent = (
+      <>
+        Transaction:{" "}
+        <a
+          href={`https://explorer.aptoslabs.com/txn/${transaction.hash}?network=testnet`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {transaction.hash}
+        </a>
+      </>
+    );
+    setAlert(alertContent, "success");
+  };
+  
   return (
     <div className="flex flex-col items-center justify-center flex-grow gap-5 ">
       <ActionList></ActionList>
