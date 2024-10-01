@@ -6,6 +6,7 @@ export default {
     ],
     theme: {
       extend: {
+       
         colors: {
           colorButton: '#617AFA',  // Màu tùy chỉnh
           bgTheme:'#FAFAFA'

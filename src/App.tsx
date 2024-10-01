@@ -13,11 +13,11 @@ function App() {
     <Router>
       <Routes>
 
-        <Route path="/" element={<Layout />} >
-          <Route path="/" element={<Home />} />
+        <Route path="/demo" element={<Layout />} >
+          <Route path="" element={<Home />} />
 
-          <Route path="/Trasction" element={<Transactions />} />
-          <Route path="/SmartStaking" element={<SmartStaking />} />
+          <Route path="Templates" element={<Transactions />} />
+          <Route path="SmartStaking" element={<SmartStaking />} />
 
         </Route>
         

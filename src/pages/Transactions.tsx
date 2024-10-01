@@ -1,10 +1,8 @@
 import { Autocomplete, Grid, styled, TextField } from "@mui/material";
 import React from "react";
-import Search from "./layouyt/Search";
 import Dropdown from "../components/Dropdown";
 import Card from "../components/SampleCard/Card";
 
-const exampple = ["a1", "a2"];
 const Transactions = () => {
   return (
     <div className="flex flex-col h-[100%] gap-5">
