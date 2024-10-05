@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import SwapSlice from './slices/SwapSlice'
+import TransactionSlice from './slices/TransactionSlice'
 
 
 export const store = configureStore({
   reducer: {
     swap: SwapSlice,
+    transaction:TransactionSlice
 
   },
 })

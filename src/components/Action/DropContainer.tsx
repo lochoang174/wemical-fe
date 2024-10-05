@@ -2,12 +2,12 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "../../Var";
 import { ActionType } from "../../types";
 interface Pros {
-  onDrop: (item: ActionType) => void;
+  onDrop: (item: any) => void;
 }
 const DropContainer = ({ onDrop }: Pros) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.COMPONENT,
-    drop: (item: ActionType) => onDrop(item),
+    drop: (item: any) => onDrop(item),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),

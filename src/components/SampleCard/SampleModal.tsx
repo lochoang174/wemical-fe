@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Box, Typography } from "@mui/material";
 import { VscArrowSwap } from "react-icons/vsc";
 import { CryptoList } from "../../utils/CryptoList";
-import { InputType, IToken } from "../../types";
+import { SwapType, IToken } from "../../types";
 import SampleInput from "./SampleInput";
 
 // Define props type for the modal
@@ -10,7 +10,7 @@ interface SampleModalProps {
   open: boolean;
   handleClose: () => void;
 }
-const list: InputType[] = [
+const list: SwapType[] = [
   {
     action: {
       title: "Convert",
@@ -75,7 +75,7 @@ const SampleModal: React.FC<SampleModalProps> = ({ open, handleClose }) => {
           px: 4,
           py: 2,
           outline: "none",
-          bgcolor: 'rgba(255, 255, 255, 0.4)',          
+          bgcolor: "rgba(255, 255, 255, 0.4)",
         }}
       >
         <Typography
@@ -96,7 +96,7 @@ const SampleModal: React.FC<SampleModalProps> = ({ open, handleClose }) => {
             let a: IToken | null = null;
             if (i === list.length - 1) {
               a = null;
-              return <></>
+              return <></>;
             } else {
               a = list[i + 1].token;
             }
