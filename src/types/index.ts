@@ -1,17 +1,42 @@
+import { PoolType } from "../components/DropdownPool/DropDownPool";
+import { ActionType } from "../redux/slices/TransactionSlice";
+
 export interface IToken {
   name: string;
-  subname:string;
+  subname: string;
   icon: string;
-  type:string
- 
+  type: string;
 }
-export interface InputType{
-  id:string,
-  action:ActionType,
-  token: IToken,
+export interface SwapType {
+  id: string;
+  // action:ActionType,
+  token: IToken;
+  amount: number;
+}
+// export interface TransactionOrder{
+//   list: (SwapType[] | StakeType | WithdrawpType)[];
+// }
+export interface ResultType{
+  action:ActionType
+  token:IToken,
   amount:number
 }
-export interface ActionType{
-  title:string,
-  icon: JSX.Element
+// export interface ActionType {
+//   title: string;
+//   icon: JSX.Element;
+// }
+
+export interface StakeType {
+  id: string;
+  pool: PoolType | null;
+  amountToken1: number | null;
+  amountToken2: number | null;
+  liquidity: number | null;
+}
+export interface WithdrawType {
+  id: string;
+  pool: PoolType | null;
+  amountToken1: number | null;
+  amountToken2: number | null;
+  liquidity: number | null;
 }

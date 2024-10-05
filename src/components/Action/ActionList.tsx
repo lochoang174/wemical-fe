@@ -3,7 +3,7 @@ import ActionItem from './ActionItem';
 import { VscArrowSwap } from 'react-icons/vsc';
 import { FaArrowUp, FaCoins } from 'react-icons/fa';
 
-const actionList = [
+export const actionList = [
     {
         title: "Convert",
         icon: <VscArrowSwap />,
@@ -13,7 +13,7 @@ const actionList = [
         icon: <FaCoins />,  
     },
     {
-        title: "Unstake",
+        title: "Withdraw",
         icon: <FaArrowUp />,  
     }
 ];

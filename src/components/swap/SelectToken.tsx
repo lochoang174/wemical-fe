@@ -9,15 +9,17 @@ import {
 import React from "react";
 import { CiSearch } from "react-icons/ci";
 import { CryptoList } from "../../utils/CryptoList";
-import { IToken } from "../../types";
+import { IToken, SwapType } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setTokenInput } from "../../redux/slices/SwapSlice";
+import { updateSwapToken } from "../../redux/slices/TransactionSlice";
+// import { setTokenInput } from "../../redux/slices/SwapSlice";
 // import { setTokenFrom, setTokenTo } from "../redux/slices/SwapSlice";
 interface SelectTokenProps {
   open: boolean;
   handleClose: () => void;
+  swapEle:SwapType
 }
-const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
+const SelectToken = ({ open, handleClose,swapEle }: SelectTokenProps) => {
   const [searchTerm, setSearchTerm] = React.useState("");
   // const isFrom = useAppSelector((state) => state.swap.isSelectingFromToken);
   const dispatch = useAppDispatch();
@@ -31,8 +33,9 @@ const SelectToken = ({ open, handleClose }: SelectTokenProps) => {
     // } else {
     //   dispatch(setTokenTo(token));
     // }
-    // handleClose();
-    dispatch(setTokenInput(token));
+    dispatch(updateSwapToken({id:swapEle.id,token}));
+        handleClose();
+
   };
 
   return (

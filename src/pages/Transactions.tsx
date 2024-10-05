@@ -1,7 +1,7 @@
 import { Autocomplete, Grid, styled, TextField } from "@mui/material";
 import React from "react";
 import Search from "./layouyt/Search";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../components/SampleCard/Dropdown";
 import Card from "../components/SampleCard/Card";
 
 const exampple = ["a1", "a2"];
