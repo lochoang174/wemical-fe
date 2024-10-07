@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { actionList } from "../Action/ActionList";
-import { StakeType } from "../../types";
+import { PoolDisplay, StakeType } from "../../types";
 import StakeModal from "./StakeModal";
 import { checkExistPool } from "../../utils/helperFunction";
 import { CiCircleRemove } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
 import { useAppDispatch } from "../../redux/hooks";
 import { deleteAction } from "../../redux/slices/TransactionSlice";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Tooltip } from "@mui/material";
 interface Pros {
   stakeEle: StakeType;
 }
 const StakeInput = ({ stakeEle }: Pros) => {
   const dispatch = useAppDispatch()
   const [open, setOpen] = useState(false);
-  const [imagePool, setImagePool] = useState<string>("");
+  const [Pool, setPool] = useState<PoolDisplay | null>(null);
   useEffect(() => {
     if (stakeEle.pool) {
-      setImagePool(
+      setPool(
         checkExistPool(stakeEle.pool?.token1, stakeEle.pool?.token2)
       );
     }
@@ -48,12 +50,14 @@ const StakeInput = ({ stakeEle }: Pros) => {
             <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[350px]">
               <div className="text-blue-800 rounded-md "></div>
               <span className="flex relative">
-                {imagePool !== "" ? (
-                  <img
+                {Pool !== null ? (
+                 <Tooltip title={Pool.name}>
+                 <img
                     className="w-6 h-6 rounded-md"
-                    src={imagePool ?? ""}
+                    src={Pool.image ?? ""}
                     alt=""
                   />
+                  </Tooltip>
                 ) : (
                   <>
                     <img
@@ -80,8 +84,8 @@ const StakeInput = ({ stakeEle }: Pros) => {
             <div className="cursor-pointer" onClick={()=>{
               dispatch(deleteAction(stakeEle.id))
             }}>
-              <CiCircleRemove />
-            </div>
+              <FaRegTrashAlt />
+              </div>
             <div
               className="cursor-pointer"
               onClick={() => {

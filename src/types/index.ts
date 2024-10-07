@@ -25,7 +25,11 @@ export interface ResultType{
 //   title: string;
 //   icon: JSX.Element;
 // }
-
+export interface PoolDisplay{
+  tokens:string[],
+  name:string,
+  image:string
+}
 export interface StakeType {
   id: string;
   pool: PoolType | null;

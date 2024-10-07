@@ -211,8 +211,10 @@ const transactionSlice = createSlice({
       // Push the new result element into the resultList
       state.resultList.push(action.payload);
     },
-
-    
+    resetResultList: (state, action: PayloadAction<void>) => {
+      state.resultList=[]
+    },
+   
   },
 
 });
@@ -237,7 +239,8 @@ export const {
   updateSwapToken,
   setActionList,
   addResultElement,
-  deleteAction
+  deleteAction,
+  resetResultList
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

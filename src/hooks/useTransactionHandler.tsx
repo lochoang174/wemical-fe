@@ -66,6 +66,7 @@ export const useTransactionHandler = () => {
         showTransactionAlert(committedTransaction);
       } catch (error) {
         console.error(`Transaction ${i + 1} failed:`, error);
+        throw error;
         break;
       }
     }
@@ -156,13 +157,14 @@ export const useTransactionHandler = () => {
     setAlert(alertContent, "success");
   };
   const handleWithdraw = async (payload: WithdrawType) => {
+  
     const response = await signAndSubmitTransaction({
       data: {
         function: `${MODULE_ADDRESS}::scripts_v3::remove_liquidity`,
         typeArguments: [
-          `0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::${payload.pool?.token1.name}`,
+          `${payload.pool?.token1.type}`,
 
-          `0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::${payload.pool?.token2.name}`,
+          `${payload.pool?.token2.type}`,
           "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated", //curves (static)
         ],
         functionArguments: [
@@ -233,9 +235,8 @@ export const useTransactionHandler = () => {
       data: {
         function: `${MODULE_ADDRESS}::scripts_v3::add_liquidity`,
         typeArguments: [
-          `0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::${payload.pool?.token1.name}`,
-
-          `0x97f28f805f9e8ab3928488d8efc903c347328ba584558b4eb6a8ea7483dc7b11::coins::${payload.pool?.token2.name}`,
+          `${payload.pool?.token1.type}`,
+          `${payload.pool?.token2.type}`,
           "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated",
         ],
         functionArguments: [

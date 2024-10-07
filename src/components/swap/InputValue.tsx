@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { SwapType, IToken } from "../../types";
+import { SwapType, IToken, PoolDisplay } from "../../types";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  handlOpenSelectToken,
-  setAmountInput,
-} from "../../redux/slices/SwapSlice";
-import { poolList } from "../../utils/PoolList";
+
 import { FaArrowRightLong } from "react-icons/fa6";
 import { actionList } from "../Action/ActionList";
 import SelectToken from "./SelectToken";
@@ -16,7 +12,8 @@ import {
   updateSwapAmount,
 } from "../../redux/slices/TransactionSlice";
 import { checkExistPool } from "../../utils/helperFunction";
-import { CiCircleRemove } from "react-icons/ci";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Tooltip } from "@mui/material";
 
 interface InputValueProps {
   index: number;
@@ -36,14 +33,14 @@ const InputValue = ({ swapEle }: InputValueProps) => {
     selectSwapActions(state)
   );
   const [nextToken, setNextToken] = useState<IToken | null>(null);
-  const [imagePool, setImagePool] = useState<string>("");
+  const [Pool, setPool] = useState<PoolDisplay | null>(null);
   useEffect(() => {
-    let index = swapActions.findIndex((ele)=>ele.payload.id===swapEle.id)
+    let index = swapActions.findIndex((ele) => ele.payload.id === swapEle.id);
     if (index + 1 < swapActions.length) {
       const ele = swapActions[index + 1].payload as SwapType;
       if (ele.token.name !== swapEle.token.name) {
         setNextToken(ele.token);
-        setImagePool(checkExistPool(ele.token, swapEle.token));
+        setPool(checkExistPool(ele.token, swapEle.token));
       } else {
         setNextToken(null);
       }
@@ -83,12 +80,14 @@ const InputValue = ({ swapEle }: InputValueProps) => {
             <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[350px]">
               <div className="text-blue-800 rounded-md "></div>
               <span className="flex relative">
-                {imagePool !== "" ? (
-                  <img
-                    className="w-6 h-6 rounded-md"
-                    src={imagePool ?? ""}
-                    alt=""
-                  />
+                {Pool !== null ? (
+                  <Tooltip title={Pool.name}>
+                    <img
+                      className="w-6 h-6 rounded-md"
+                      src={Pool.image ?? ""}
+                      alt=""
+                    />
+                  </Tooltip>
                 ) : (
                   <>
                     <img className="w-6 h-6 " src={swapEle.token.icon} alt="" />
@@ -110,28 +109,31 @@ const InputValue = ({ swapEle }: InputValueProps) => {
             </div>
           )}
 
-          <div className="flex justify-center gap-1 items-center text-white">
-          <div className="cursor-pointer text-xl self-center" onClick={()=>{
-              dispatch(deleteAction(swapEle.id))
-            }}>
-              <CiCircleRemove />
+          <div className="flex justify-center gap-2 items-center text-white">
+            <div
+              className="cursor-pointer text-xl self-center"
+              onClick={() => {
+                dispatch(deleteAction(swapEle.id));
+              }}
+            >
+              <FaRegTrashAlt />
             </div>
             <div
-              className="rounded-xl p-2 bg-white text-black flex border-2  cursor-pointer w-[80px] justify-center gap-1 "
+              className="bg-transparent  flex cursor-pointer "
               onClick={() => {
                 setOpen(true);
               }}
             >
               <img src={swapEle.token!.icon} alt="" className="w-5 h-5" />
-              <span className=" text-[12px] self-center">
+              {/* <span className=" text-[12px] self-center">
                 {swapEle.token!.name}
-              </span>
+              </span> */}
             </div>
           </div>
         </div>
       </div>
       <SelectToken
-      swapEle={swapEle}
+        swapEle={swapEle}
         handleClose={() => {
           setOpen(false);
         }}

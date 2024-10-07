@@ -3,22 +3,24 @@ import { actionList } from "../Action/ActionList";
 import { FiEdit } from "react-icons/fi";
 import { CiCircleRemove } from "react-icons/ci";
 import WithdrawModal from "./WithdrawModal";
-import { IToken, WithdrawType } from "../../types";
+import { IToken, PoolDisplay, WithdrawType } from "../../types";
 import { poolList } from "../../utils/PoolList";
 import { checkExistPool } from "../../utils/helperFunction";
 import { deleteAction } from "../../redux/slices/TransactionSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Tooltip } from "@mui/material";
 interface Pros {
   withdrawEle: WithdrawType;
 }
 const WithdrawInput = ({ withdrawEle }: Pros) => {
   const [open, setOpen] = useState(false);
-  const [imagePool, setImagePool] = useState<string>("");
-  const dispatch = useAppDispatch()
+  const [Pool, setPool] = useState<PoolDisplay | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (withdrawEle.pool) {
-      setImagePool(
+      setPool(
         checkExistPool(withdrawEle.pool?.token1, withdrawEle.pool?.token2)
       );
     }
@@ -42,7 +44,6 @@ const WithdrawInput = ({ withdrawEle }: Pros) => {
                   className="w-[140px] bg-transparent outline-none [&::-webkit-inner-spin-button]:appearance-none overflow-auto text-white"
                   placeholder="0.00"
                   disabled={true}
-                  
                 />
               </div>
             </div>
@@ -51,12 +52,14 @@ const WithdrawInput = ({ withdrawEle }: Pros) => {
             <div className="text-[16px]  flex gap-4 text-white  px-2.5 py-0.5 items-center w-[350px]">
               <div className="text-blue-800 rounded-md "></div>
               <span className="flex relative">
-                {imagePool !== "" ? (
-                  <img
-                    className="w-6 h-6 rounded-md"
-                    src={imagePool ?? ""}
-                    alt=""
-                  />
+                {Pool !== null? (
+                   <Tooltip title={Pool.name}>
+                   <img
+                      className="w-6 h-6 rounded-md"
+                      src={Pool.image ?? ""}
+                      alt=""
+                    />
+                    </Tooltip>
                 ) : (
                   <>
                     <img
@@ -81,10 +84,13 @@ const WithdrawInput = ({ withdrawEle }: Pros) => {
           )}
 
           <div className="flex text-white self-center gap-2 text-xl">
-          <div className="cursor-pointer" onClick={()=>{
-              dispatch(deleteAction(withdrawEle.id))
-            }}>
-              <CiCircleRemove />
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                dispatch(deleteAction(withdrawEle.id));
+              }}
+            >
+              <FaRegTrashAlt />
             </div>
             <div
               className="cursor-pointer"

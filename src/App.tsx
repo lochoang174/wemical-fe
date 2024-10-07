@@ -6,13 +6,16 @@ import Layout from "./pages/layouyt/Layout";
 import Home from "./pages/Home";
 import Transactions from "./pages/Transactions";
 import SmartStaking from "./pages/SmartStaking";
+import RedirectDemo from "./components/RedirectDemo";
 
 
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<RedirectDemo/>}/>
 
+      
         <Route path="/demo" element={<Layout />} >
           <Route path="" element={<Home />} />
 
