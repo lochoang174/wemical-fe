@@ -12,37 +12,25 @@ interface SampleModalProps {
 }
 const list: SwapType[] = [
   {
-    action: {
-      title: "Convert",
-      icon: <VscArrowSwap />,
-    },
+   
     amount: 0,
     id: "1123",
     token: CryptoList[0],
   },
   {
-    action: {
-      title: "Convert",
-      icon: <VscArrowSwap />,
-    },
+   
     amount: 0,
     id: "1123khjkjhk",
     token: CryptoList[1],
   },
   {
-    action: {
-      title: "Convert",
-      icon: <VscArrowSwap />,
-    },
+   
     amount: 0,
     id: "11dasd23",
     token: CryptoList[2],
   },
   {
-    action: {
-      title: "Convert",
-      icon: <VscArrowSwap />,
-    },
+   
     amount: 0,
     id: "11dasdda23",
     token: CryptoList[3],

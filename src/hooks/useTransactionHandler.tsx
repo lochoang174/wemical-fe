@@ -3,11 +3,7 @@ import { useRef, useEffect } from "react";
 import {
   ActionType,
   addResultElement,
-  addStake,
-  addSwap,
-  addWithdraw,
   selectSwapActions,
-  setActionList,
   updateAmountWithdraw,
   updateLiquidStake,
   updateStakeAmount,
@@ -30,7 +26,7 @@ import { useAlert } from "../contexts/AlerProvider";
 import { displayAmount } from "../utils/helperFunction";
 
 export const useTransactionHandler = () => {
-  const { actions, resultList } = useAppSelector((state) => state.transaction);
+  const { resultList } = useAppSelector((state) => state.transaction);
   const swapActions = useAppSelector((state: RootState) =>
     selectSwapActions(state)
   );
@@ -119,7 +115,11 @@ export const useTransactionHandler = () => {
       data: {
         function: `${MODULE_ADDRESS}::scripts_v3::swap`,
         typeArguments: [
+          //@ts-ignore
+
           swapActions[index].payload.token.type,
+          //@ts-ignore
+
           swapActions[index + 1].payload.token.type,
           "0x190d44266241744264b964a37b8f09863167a12d3e70cda39376cfb4e3561e12::curves::Uncorrelated",
         ],
@@ -136,6 +136,8 @@ export const useTransactionHandler = () => {
   };
 
   const formatSwapAmount = (index: number, amount: number) => {
+    //@ts-ignore
+
     return swapActions[index].payload.token.name === "USDC"
       ? amount / 1000000
       : amount / 100000000;
@@ -157,7 +159,6 @@ export const useTransactionHandler = () => {
     setAlert(alertContent, "success");
   };
   const handleWithdraw = async (payload: WithdrawType) => {
-  
     const response = await signAndSubmitTransaction({
       data: {
         function: `${MODULE_ADDRESS}::scripts_v3::remove_liquidity`,
@@ -180,7 +181,11 @@ export const useTransactionHandler = () => {
     dispatch(
       updateAmountWithdraw({
         id: payload.id,
+        //@ts-ignore
+
         amount1: committedTransaction.events[2].data.returned_x_val,
+        //@ts-ignore
+
         amount2: committedTransaction.events[2].data.returned_y_val,
       })
     );
@@ -203,12 +208,15 @@ export const useTransactionHandler = () => {
       payload.pool?.token2.name ?? "",
       payload.amountToken2 ?? 0
     );
-
+    //@ts-ignore
     const result1 = findResultByToken(payload.pool?.token1);
+    //@ts-ignore
 
     const result2 = findResultByToken(payload.pool?.token2);
     if (result1) {
-      let e = displayAmount(payload.pool?.token1, result1.amount);
+      //@ts-ignore
+
+      const e = displayAmount(payload.pool?.token1, result1.amount);
       dispatch(
         updateStakeAmount({
           amountIndex: "amount1",
@@ -219,7 +227,9 @@ export const useTransactionHandler = () => {
       amount1 = result1.amount;
     }
     if (result2) {
-      let e = displayAmount(payload.pool?.token2, result2.amount);
+      //@ts-ignore
+
+      const e = displayAmount(payload.pool?.token2, result2.amount);
 
       dispatch(
         updateStakeAmount({
@@ -253,6 +263,8 @@ export const useTransactionHandler = () => {
     dispatch(
       updateLiquidStake({
         id: payload.id,
+        //@ts-ignore
+
         liquidity: committedTransaction.events[3].data.lp_tokens_received,
       })
     );

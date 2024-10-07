@@ -21,10 +21,7 @@ export interface ResultType{
   token:IToken,
   amount:number
 }
-// export interface ActionType {
-//   title: string;
-//   icon: JSX.Element;
-// }
+
 export interface PoolDisplay{
   tokens:string[],
   name:string,

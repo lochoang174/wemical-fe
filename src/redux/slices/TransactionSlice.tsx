@@ -117,11 +117,14 @@ const transactionSlice = createSlice({
         state.resultList.push({
           action: ActionType.WITHDRAW,
           amount : amount1,
+          //@ts-ignore
           token :withdrawAction.pool?.token1
         })
         state.resultList.push({
           action: ActionType.WITHDRAW,
           amount : amount2,
+                    //@ts-ignore
+
           token :withdrawAction.pool?.token2
         })
       }

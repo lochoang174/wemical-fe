@@ -1,5 +1,5 @@
 import React from "react";
-import { SwapType } from "../../types";
+import { StakeType, SwapType, WithdrawType } from "../../types";
 import InputValue from "./InputValue";
 import { useAppSelector } from "../../redux/hooks";
 import { Draggable } from "@hello-pangea/dnd";
@@ -34,19 +34,19 @@ const InputList = React.memo(
               >
                 {inputEle.type === ActionType.SWAP ? (
                   <InputValue
-                    swapEle={inputEle.payload}
+                    swapEle={inputEle.payload as SwapType}
                     key={inputEle.payload.id}
                     index={index}
                   />
                 ) : inputEle.type === ActionType.STAKE ? (
                   <StakeInput
-                    stakeEle={inputEle.payload}
+                    stakeEle={inputEle.payload as StakeType}
                     key={inputEle.payload.id}
                   />
                 ) : inputEle.type === ActionType.WITHDRAW ? (
                   <WithdrawInput
                     key={inputEle.payload.id}
-                    withdrawEle={inputEle.payload}
+                    withdrawEle={inputEle.payload as WithdrawType}
                   />
                 ) : null}
               </div>

@@ -3,6 +3,7 @@ import { SwapType, IToken } from "../../types";
 import { VscArrowSwap } from "react-icons/vsc";
 import { CryptoList } from "../../utils/CryptoList";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { actionList } from "../Action/ActionList";
 
 interface Props {
   input: SwapType;
@@ -15,8 +16,8 @@ const SampleInput = ({ input, nextToken }: Props) => {
         <div className="flex justify-between w-full">
           <div className="flex gap-8">
             <span className=" text-white flex justify-center items-center w-[80px] text-[14px] gap-1">
-              <span className="text-3xl">{input.action.icon}</span>
-              {input.action.title}
+              <span className="text-3xl">{actionList[0].icon}</span>
+              {actionList[0].title}
             </span>
             <div className="flex flex-col justify-center">
               <div className=" text-xl whitespace-nowrap tracking-[0] leading-[normal]">

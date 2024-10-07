@@ -1,6 +1,5 @@
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../../Var";
-import { ActionType } from "../../types";
 interface Pros {
   onDrop: (item: any) => void;
 }
