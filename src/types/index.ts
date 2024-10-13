@@ -41,3 +41,15 @@ export interface WithdrawType {
   amountToken2: number | null;
   liquidity: number | null;
 }
+export interface SampleCardType{
+  id:string,
+  title:string,
+  description:string,
+  actionList:SampleActionType[]
+
+}
+export interface SampleActionType{
+  action:ActionType,
+  token1:IToken,
+  token2:IToken
+}

@@ -10,7 +10,7 @@ import { checkExistPool } from "../../utils/helperFunction";
 interface Props {
   element: SampleActionType;
 }
-const SampleInput = ({ element }: Props) => {
+const SampleWithdraw = ({ element }: Props) => {
   const [Pool, setPool] = useState<PoolDisplay | null>(null);
   useEffect(() => {
       setPool(
@@ -24,8 +24,8 @@ const SampleInput = ({ element }: Props) => {
         <div className="flex justify-between w-full">
           <div className="flex gap-8">
             <span className=" text-white flex justify-center items-center w-[80px] text-[14px] gap-1">
-              <span className="text-3xl">{actionList[0].icon}</span>
-              {actionList[0].title}
+              <span className="text-3xl">{actionList[2].icon}</span>
+              {actionList[2].title}
             </span>
             {/* <div className="flex flex-col justify-center">
               <div className=" text-xl whitespace-nowrap tracking-[0] leading-[normal]">
@@ -69,7 +69,7 @@ const SampleInput = ({ element }: Props) => {
               <span className="flex gap-4 ">
                 {element.token1.name}
                 <span className="self-center">/</span>
-                {element.token2.name}
+                {element.token1.name}
               </span>
             </div>
           </div>
@@ -80,4 +80,4 @@ const SampleInput = ({ element }: Props) => {
   );
 };
 
-export default SampleInput;
+export default SampleWithdraw;

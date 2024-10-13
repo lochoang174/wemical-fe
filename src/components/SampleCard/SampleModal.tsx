@@ -2,41 +2,45 @@ import React from "react";
 import { Modal, Box, Typography } from "@mui/material";
 import { VscArrowSwap } from "react-icons/vsc";
 import { CryptoList } from "../../utils/CryptoList";
-import { SwapType, IToken } from "../../types";
+import { SwapType, IToken, SampleActionType } from "../../types";
 import SampleInput from "./SampleInput";
+import { ActionType } from "../../redux/slices/TransactionSlice";
+import SampleStake from "./SampleStake";
+import SampleWithdraw from "./SampleWithdraw";
 
 // Define props type for the modal
 interface SampleModalProps {
   open: boolean;
   handleClose: () => void;
+  actions: SampleActionType[];
 }
 const list: SwapType[] = [
   {
-   
     amount: 0,
     id: "1123",
     token: CryptoList[0],
   },
   {
-   
     amount: 0,
     id: "1123khjkjhk",
     token: CryptoList[1],
   },
   {
-   
     amount: 0,
     id: "11dasd23",
     token: CryptoList[2],
   },
   {
-   
     amount: 0,
     id: "11dasdda23",
     token: CryptoList[3],
   },
 ];
-const SampleModal: React.FC<SampleModalProps> = ({ open, handleClose }) => {
+const SampleModal: React.FC<SampleModalProps> = ({
+  open,
+  handleClose,
+  actions,
+}) => {
   return (
     <Modal
       open={open}
@@ -80,18 +84,24 @@ const SampleModal: React.FC<SampleModalProps> = ({ open, handleClose }) => {
         </div>
 
         <div className="flex items-center gap-3 flex-col">
-          {list.map((e, i) => {
-            let a: IToken | null = null;
-            if (i === list.length - 1) {
-              a = null;
-              return <></>;
-            } else {
-              a = list[i + 1].token;
+          {actions.map((ele, index) => {
+            if (ele.action === ActionType.SWAP) {
+              return (
+                <SampleInput
+                  element={ele}
+                  key={index} // Use index if no other unique identifier is available
+                />
+              );
+            } else if (ele.action === ActionType.STAKE) {
+              return <SampleStake element={ele} key={index} />;
+            } else if (ele.action === ActionType.WITHDRAW) {
+              return <SampleWithdraw element={ele} key={index} />;
             }
-            return <SampleInput input={e} nextToken={a}></SampleInput>;
+            return null;
           })}
-          <button className="w-[80%] h-[44px] rounded-xl text-black bg-[#ffffff] ">
-            Edit and execute
+
+          <button className="w-[80%] h-[44px] rounded-xl text-black bg-[#ffffff] " onClick={handleClose}>
+            Close
           </button>
         </div>
       </Box>

@@ -3,6 +3,7 @@ import React from "react";
 import Search from "./layouyt/Search";
 import Dropdown from "../components/SampleCard/Dropdown";
 import Card from "../components/SampleCard/Card";
+import { sampleList } from "../utils/SampleList";
 
 const Transactions = () => {
   return (
@@ -22,17 +23,17 @@ const Transactions = () => {
       </div>
       <div className="flex-grow overflow-auto">
         <GridContainer container spacing={4}>
-          {[...Array(6)].map((_, index) => {
+          {sampleList.map((s, index) => {
             return (
               <Grid 
               item 
               xs={12}    // 1 item chiếm 12 cột trên màn hình nhỏ (<= 600px)
               md={6}     // 1 item chiếm 6 cột (2 items trên hàng) trên màn hình vừa (600px - 960px)
               lg={4}     // 1 item chiếm 4 cột (3 items trên hàng) trên màn hình lớn hơn (960px - 1280px)
-              key={index}
+              key={s.id}
               
               >
-                <Card />
+                <Card sample={s}/>
               </Grid>
             );
           })}
