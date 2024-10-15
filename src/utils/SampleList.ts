@@ -72,7 +72,7 @@ export const sampleList: SampleCardType[] = [
     id: "4",
     title: "Swap  APT to BTC, Claim amAPT & USDC, Provide liquidity to amAPT/BTC Pool",
     description:
-      "Start by swapping WEM for USDC, followed by swapping APT for BTC. Withdraw amAPT and USDC, then stake amAPT and BTC into the amAPT/BTC pool.",
+      "Start by  swapping APT for BTC. Withdraw amAPT and USDC, then stake amAPT and BTC into the amAPT/BTC pool.",
     actionList: [
  
       {

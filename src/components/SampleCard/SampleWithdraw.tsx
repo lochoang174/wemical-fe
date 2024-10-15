@@ -69,7 +69,7 @@ const SampleWithdraw = ({ element }: Props) => {
               <span className="flex gap-4 ">
                 {element.token1.name}
                 <span className="self-center">/</span>
-                {element.token1.name}
+                {element.token2.name}
               </span>
             </div>
           </div>

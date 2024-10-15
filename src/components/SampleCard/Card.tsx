@@ -47,7 +47,7 @@ const Card = ({sample}:Pros) => {
           <div className="text-[12px] cursor-pointer" onClick={handleOpen}>More detail</div>
         </div>
       </div>
-      <SampleModal handleClose={handleClose} open={open} actions={sample.actionList} ></SampleModal>
+      <SampleModal handleClose={handleClose} open={open} actions={sample.actionList} description={sample.description}></SampleModal>
     </>
     
   );

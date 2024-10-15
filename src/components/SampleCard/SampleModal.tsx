@@ -13,33 +13,14 @@ interface SampleModalProps {
   open: boolean;
   handleClose: () => void;
   actions: SampleActionType[];
+  description:string
 }
-const list: SwapType[] = [
-  {
-    amount: 0,
-    id: "1123",
-    token: CryptoList[0],
-  },
-  {
-    amount: 0,
-    id: "1123khjkjhk",
-    token: CryptoList[1],
-  },
-  {
-    amount: 0,
-    id: "11dasd23",
-    token: CryptoList[2],
-  },
-  {
-    amount: 0,
-    id: "11dasdda23",
-    token: CryptoList[3],
-  },
-];
+
 const SampleModal: React.FC<SampleModalProps> = ({
   open,
   handleClose,
   actions,
+  description
 }) => {
   return (
     <Modal
@@ -59,7 +40,7 @@ const SampleModal: React.FC<SampleModalProps> = ({
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: 570,
-          height: 500,
+          height: 548,
           display: "flex",
           flexDirection: "column",
           borderRadius: "24px",
@@ -78,12 +59,12 @@ const SampleModal: React.FC<SampleModalProps> = ({
         >
           Preview Recipe
         </Typography>
-        <div className="text-white overflow-hidden">
-          Provide liquidity to OraiDEX with USDT & USDC Swap ORAI for USDC &
-          USDT, then deposit USDC & USDT to provide liquidity for pool V3
+        <div className="text-white overflow-auto ">
+         {description}
         </div>
 
-        <div className="flex items-center gap-3 flex-col">
+        <div className="flex  flex-col w-[100%]  grow ">
+          <div className="flex-grow flex flex-col items-center gap-3 gap-4">
           {actions.map((ele, index) => {
             if (ele.action === ActionType.SWAP) {
               return (
@@ -99,8 +80,10 @@ const SampleModal: React.FC<SampleModalProps> = ({
             }
             return null;
           })}
+          </div>
+         
 
-          <button className="w-[80%] h-[44px] rounded-xl text-black bg-[#ffffff] " onClick={handleClose}>
+          <button className="w-[80%] h-[44px] rounded-xl text-black bg-[#ffffff] self-center " onClick={handleClose}>
             Close
           </button>
         </div>
